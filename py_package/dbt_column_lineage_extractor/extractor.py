@@ -29,7 +29,7 @@ class DbtColumnLineageExtractor:
             self.selected_models = [
                 node
                 for node in self.manifest["nodes"].keys()
-                if self.manifest["nodes"][node].get("resource_type") == "model"
+                if self.manifest["nodes"][node].get("resource_type") in ["model", "snapshot"]
             ]
         else:
             # Process selectors to get models
@@ -350,7 +350,7 @@ class DbtColumnLineageExtractor:
         mapping = {}
         for key, node in self.manifest["nodes"].items():
             # Only include model, source, and seed nodes
-            if node.get("resource_type") in ["model", "source", "seed"]:
+            if node.get("resource_type") in ["model", "snapshot", "source", "seed"]:
                 try:
                     dbt_node = DBTNodeManifest(node)
                     mapping[dbt_node.full_table_name] = key
@@ -437,7 +437,7 @@ class DbtColumnLineageExtractor:
                         f"Skipping column lineage detection for Python model {model_node}"
                     )
                     continue
-                if model_info["resource_type"] != "model":
+                if model_info["resource_type"] not in ["model", "snapshot"]:
                     self.logger.info(
                         f"Skipping column lineage detection for {model_node} as it's not a model but a {model_info['resource_type']}"
                     )
