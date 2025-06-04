@@ -26,7 +26,7 @@ setup(
     author='Wen Wu',
     author_email='wenwu@canva.com',
     url='https://github.com/canva-public/dbt-column-lineage-extractor',
-    packages=find_packages(),
+    packages=find_packages(where='.'),
     install_requires=[
         'sqlglot[rs] == 25.24.5',
     ],
